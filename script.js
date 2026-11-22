@@ -295,30 +295,27 @@ displayExpenses();
 updateSummary();
 
 const categoryFilter = document.getElementById("category-filter");
-
-
-function filterExpenses(category) {
-    let filteredExpenses = expenses.filter(function(expense) {
-        return expense.category === category;
-    });
-
-    return filteredExpenses;
-};
-
 const dateFilter = document.getElementById("date-filter");
 
-
 function applyFilters() {
-const selectedCategory = categoryFilter.value;
-const selectedDate = dateFilter.value;
-const filteredExpenses = expenses.filter(function(expense){
-    return (selectedCategory === "all" || expense.category === selectedCategory) && 
-    (selectedDate === "" || expense.date === selectedDate);
-})
-displayExpenses(filteredExpenses);
+
+    const selectedCategory = categoryFilter.value.trim().toLowerCase();
+    const selectedDate = dateFilter.value;
+
+    const filteredExpenses = expenses.filter(function(expense) {
+
+        const categoryMatches =
+            selectedCategory === "all" ||
+            String(expense.category || "").trim().toLowerCase() === selectedCategory;
+            const dateMatches =
+            selectedDate === "" ||
+            expense.date === selectedDate;
+
+        return categoryMatches && dateMatches;
+    });
+
+    displayExpenses(filteredExpenses);
 }
 
-categoryFilter.addEventListener("change" , applyFilters);
-dateFilter.addEventListener("change" , applyFilters);
-
-
+categoryFilter.addEventListener("change", applyFilters);
+dateFilter.addEventListener("change", applyFilters);
